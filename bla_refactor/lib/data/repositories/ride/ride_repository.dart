@@ -4,8 +4,8 @@ import '../../../model/ride/ride.dart';
 
 abstract class RideRepository {
   // get all available rides.
-  Future<List<Ride>> getAllRides();
+  List<Ride> getAllRides();
 
   // get matching ride from user preference
-  Future<List<Ride>> getRidesFor(RidePreference ridePref);
+  List<Ride> getRidesFor(RidePreference ridePref);
 }
