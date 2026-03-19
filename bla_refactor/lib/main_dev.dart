@@ -1,6 +1,6 @@
 import 'package:bla_refactor/data/repositories/location/location_repository_mock.dart';
+import 'package:bla_refactor/ui/states/ride_preference_state.dart';
 import 'package:provider/provider.dart';
-import 'package:nested/nested.dart';
 import 'package:bla_refactor/data/repositories/ride/ride_repository_mock.dart';
 import 'package:bla_refactor/data/repositories/ride_pref/ride_pref_repository_mock.dart';
 import 'package:bla_refactor/main_common.dart';
@@ -9,8 +9,10 @@ import 'data/repositories/ride/ride_repository.dart';
 import 'data/repositories/ride_pref/ride_pref_repository.dart';
 
 
-List<SingleChildWidget> get devProviders {
-  
+List<InheritedProvider> get devProviders {
+
+    final ridePrefRepository = RidePrefRepositoryMock();
+
   return [
 
     // Inject location repository
@@ -20,7 +22,10 @@ List<SingleChildWidget> get devProviders {
     Provider<RideRepository>(create: (_) => RideRepositoryMock()),
 
     // Inject ride preference repository
-    Provider<RidePrefRepository>(create: (_) => RidePrefRepositoryMock()),
+    Provider<RidePrefRepository>(create: (_) => ridePrefRepository),
+
+    // Inject ride preference state
+    ChangeNotifierProvider<RidePreferenceState>(create: (_) => RidePreferenceState(ridePrefRepository: ridePrefRepository))
 
   ];
 }
