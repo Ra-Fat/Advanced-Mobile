@@ -4,27 +4,22 @@ import 'package:nested/nested.dart';
 import 'ui/screens/home/home_screen.dart';
 import 'ui/theme/theme.dart';
 
-
-
-void mainCommon(List<SingleChildWidget> providers){
+void mainCommon(List<SingleChildWidget> providers) {
   runApp(
     MultiProvider(
       providers: providers,
-      child: const BlaBlaApp(),
-    )
+      child: MaterialApp(debugShowCheckedModeBanner: false, home: BlaBlaApp()),
+    ),
   );
 }
-
-
 class BlaBlaApp extends StatelessWidget {
   const BlaBlaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       theme: blaTheme,
-      home: HomeScreen()
+      home: Scaffold(body: HomeScreen()),
     );
   }
 }

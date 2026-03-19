@@ -1,23 +1,16 @@
-import 'package:bla_refactor/model/ride_pref/ride_pref.dart';
 import 'package:bla_refactor/ui/screens/home/view_model/home_view_model.dart';
 import 'package:bla_refactor/ui/screens/home/widgets/home_history_tile.dart';
-import 'package:bla_refactor/ui/screens/rides_selection/rides_selection_screen.dart';
 import 'package:bla_refactor/ui/theme/theme.dart';
 import 'package:bla_refactor/ui/widgets/pickers/bla_ride_preference_picker.dart';
-import 'package:bla_refactor/utils/animations_util.dart';
 import 'package:flutter/material.dart';
 
 
-  const String blablaHomeImagePath = 'assets/images/blabla_home.png';
+const String blablaHomeImagePath = 'assets/images/blabla_home.png';
 
 class HomeContent extends StatelessWidget {
   final HomeViewModel homeViewModel;
   const HomeContent({super.key, required this.homeViewModel});
 
-  void onRidePrefSelected( BuildContext context, HomeViewModel homeViewModel, RidePreference selectedPreference,) async {
-    homeViewModel.setRidePreference(selectedPreference);
-    await Navigator.of(context,).push(AnimationUtils.createBottomToTopRoute(RidesSelectionScreen()));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +45,9 @@ class HomeContent extends StatelessWidget {
             children: [
               // 2 - THE FORM
               BlaRidePreferencePicker(
-                initRidePreference: homeViewModel.currentRidePreference,
+                initRidePreference: homeViewModel.currentPreference,
                 onRidePreferenceSelected: (pref) =>
-                    onRidePrefSelected(context, homeViewModel, pref),
+                homeViewModel.onRidePrefSelected(context, pref),
               ),
               SizedBox(height: BlaSpacings.m),
 
@@ -79,7 +72,7 @@ class HomeContent extends StatelessWidget {
         itemBuilder: (ctx, index) => HomeHistoryTile(
           ridePref: history[index],
           onPressed: () =>
-              onRidePrefSelected(context, homeViewModel, history[index]),
+              homeViewModel.onRidePrefSelected(ctx, history[index]),
         ),
       ),
     );
