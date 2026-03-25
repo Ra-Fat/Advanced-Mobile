@@ -31,19 +31,6 @@ class ArtistRepositoryFirebase extends ArtistRepository {
 
   @override
   Future<Artist?> fetchArtistById(String id) async {
-    final Uri artistUriById = Uri.https(
-      'week-9-practice-default-rtdb.asia-southeast1.firebasedatabase.app',
-      '/artists/$id.json',
-    );
-
-    final http.Response response = await http.get(artistUriById);
-
-    if(response.statusCode == 200){
-      final Map<String, dynamic> artistMap = json.decode(response.body);
-
-      return ArtistDto.fromJson(artistMap, id: id);
-    }else{
-      throw Exception('Failed to load Artist $id');
-    }
+    
   }
 }

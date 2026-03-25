@@ -17,4 +17,9 @@ class Song {
   String toString() {
     return 'Song(id: $id, title: $title, artist: $artistId, duration: $duration, imageUrl: $imageUrl)';
   }
+
+  String get durationInMinutes{
+    final minutes = duration.inMinutes;
+    return "$minutes mins";
+  }
 }
