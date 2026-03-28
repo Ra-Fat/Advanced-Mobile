@@ -36,6 +36,7 @@ class LibraryViewModel extends ChangeNotifier {
     fetchSong();
   }
 
+
   void fetchSong() async {
     // 1- Loading state
     data = AsyncValue.loading();
@@ -74,4 +75,33 @@ class LibraryViewModel extends ChangeNotifier {
 
   void start(Song song) => playerState.start(song);
   void stop(Song song) => playerState.stop();
+
+  Future<void> likeSong(String songId) async{
+    
+    if(data.state != AsyncValueState.success || data.data == null) return;
+
+    final List<LibraryItemData> currentItem = List.from(data.data!);
+
+    final int index = currentItem.indexWhere((item)=> item.song.id == songId);
+    if(index == -1) return;
+
+    try{
+      
+      final Song updateSong = await songRepository.likeSong(songId);
+
+      final LibraryItemData oldItem = currentItem[index];
+      
+      currentItem[index] = LibraryItemData(
+        song: updateSong, 
+        artist: oldItem.artist
+      );
+
+      data = AsyncValue.success(currentItem);
+      notifyListeners();
+    }catch(err){
+      data = AsyncValue.error(err);
+      notifyListeners();
+    }
+  } 
+
 }

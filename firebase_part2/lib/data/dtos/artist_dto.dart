@@ -1,5 +1,4 @@
- 
-import '../../model/artist/artist.dart';
+ import '../../model/artist/artist.dart';
 
 class ArtistDto {
   static const String nameKey = 'name';

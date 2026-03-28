@@ -33,4 +33,37 @@ class SongRepositoryFirebase extends SongRepository {
 
   @override
   Future<Song?> fetchSongById(String id) async {}
+
+  @override
+  Future<Song> likeSong(String id) async {
+    
+    final Uri songUri = Uri.https(
+      'grand-cineplex-default-rtdb.firebaseio.com',
+      '/songs/$id.json',
+    );
+
+    final http.Response response = await http.get(songUri);
+
+    if(response.statusCode == 200){
+      final Map<String, dynamic> songData = json.decode(response.body);
+
+      int currentLikes = songData['like'] ?? 0;
+      songData['like'] = currentLikes + 1;
+
+      final http.Response updateLike = await http.patch(
+        songUri,
+        body: json.encode({
+          'like' : songData['like'],
+        })
+      );
+
+      if(updateLike.statusCode == 200){
+        return SongDto.fromJson(id, songData);
+      }else{
+        throw Exception('Failed to update like');
+      }
+    }else{
+      throw Exception('Failed to fetch song');
+    }
+  }
 }
