@@ -31,7 +31,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = [  LibraryScreen(), ArtistsScreen(), SettingsScreen()];
+  final List<Widget> _pages = const [
+    LibraryScreen(),
+    ArtistsScreen(),
+    SettingsScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +48,7 @@ class _MyAppState extends State<MyApp> {
       theme: appTheme,
       home: Scaffold(
         backgroundColor: settingsState.theme.backgroundColor,
-        body: _pages[_currentIndex],
+        body: IndexedStack(index: _currentIndex, children: _pages),
     
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,

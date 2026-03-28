@@ -12,8 +12,15 @@ class SongRepositoryFirebase extends SongRepository {
     '/songs.json',
   );
 
+  List<Song>? _cachedSongsData;
+
   @override
-  Future<List<Song>> fetchSongs() async {
+  Future<List<Song>> fetchSongs({bool forceFetch = false}) async {
+
+    if(!forceFetch && _cachedSongsData!= null){
+      return _cachedSongsData!;
+    }
+
     final http.Response response = await http.get(songsUri);
 
     if (response.statusCode == 200) {
@@ -24,6 +31,7 @@ class SongRepositoryFirebase extends SongRepository {
       for (final entry in songJson.entries) {
         result.add(SongDto.fromJson(entry.key, entry.value));
       }
+      _cachedSongsData = result;
       return result;
     } else {
       // 2- Throw expcetion if any issue
@@ -50,7 +58,7 @@ class SongRepositoryFirebase extends SongRepository {
       int currentLikes = songData['like'] ?? 0;
       songData['like'] = currentLikes + 1;
 
-      final http.Response updateLike = await http.patch(
+      final http.Response updateLike = await http.patch(  
         songUri,
         body: json.encode({
           'like' : songData['like'],

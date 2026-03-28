@@ -7,7 +7,9 @@ import 'library_item_tile.dart';
 import '../view_model/library_view_model.dart';
 
 class LibraryContent extends StatelessWidget {
-  const LibraryContent({super.key});
+  LibraryContent({super.key});
+
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +26,20 @@ class LibraryContent extends StatelessWidget {
         break;
       case AsyncValueState.error:
         content = Center(child: Text('error = ${asyncValue.error!}', style: TextStyle(color: Colors.red),));
+        break;
 
       case AsyncValueState.success:
         List<LibraryItemData> data = asyncValue.data!;
-        content = ListView.builder(
-          itemCount: data.length,
-          itemBuilder: (context, index) => LibraryItemTile(
+        content = RefreshIndicator(
+          key: _refreshIndicatorKey,
+          onRefresh: () => mv.refresh(),
+          backgroundColor: Colors.blue,
+          strokeWidth: 4.0,
+          color: Colors.white,
+          child: ListView.builder(
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemCount: data.length,
+            itemBuilder: (context, index) => LibraryItemTile(
             data: data[index],
             isPlaying: mv.isSongPlaying(data[index].song),
             onTap: () {
@@ -39,6 +49,7 @@ class LibraryContent extends StatelessWidget {
               mv.likeSong(data[index].song.id);
             }
           ),
+          ), 
         );
     }
 
@@ -47,10 +58,15 @@ class LibraryContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          IconButton(
+            onPressed: () {
+              _refreshIndicatorKey.currentState?.show();
+            },
+            icon: Icon(Icons.refresh),
+          ),
           SizedBox(height: 16),
           Text("Library", style: AppTextStyles.heading),
           SizedBox(height: 50),
-
           Expanded(child: content),
         ],
       ),

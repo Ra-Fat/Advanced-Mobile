@@ -8,7 +8,10 @@ import '../../../widgets/song/artist_tile.dart';
 import '../view_model/artists_view_model.dart';
 
 class ArtistsContent extends StatelessWidget {
-  const ArtistsContent({super.key});
+  ArtistsContent({super.key});
+
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -20,22 +23,30 @@ class ArtistsContent extends StatelessWidget {
     Widget content;
     switch (asyncValue.state) {
       case AsyncValueState.loading:
-        content = Center(child: CircularProgressIndicator());
+        content = const Center(child: CircularProgressIndicator());
         break;
       case AsyncValueState.error:
         content = Center(
           child: Text(
             'error = ${asyncValue.error!}',
-            style: TextStyle(color: Colors.red),
+            style: const TextStyle(color: Colors.red),
           ),
         );
+        break;
 
       case AsyncValueState.success:
         List<Artist> artists = asyncValue.data!;
-        content = ListView.builder(
-          itemCount: artists.length,
-          itemBuilder: (context, index) => ArtistTile(artist: artists[index]),
+        content = RefreshIndicator(
+          onRefresh: mv.refresh,
+          key: _refreshIndicatorKey,
+          backgroundColor: Colors.blue,
+          color: Colors.white,
+          child: ListView.builder(
+            itemCount: artists.length,
+            itemBuilder: (context, index) => ArtistTile(artist: artists[index]),
+          ),
         );
+        break;
     }
 
     return Padding(
@@ -43,9 +54,15 @@ class ArtistsContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 16),
-          Text("Library", style: AppTextStyles.heading),
-          SizedBox(height: 50),
+          IconButton(
+            onPressed: () {
+              _refreshIndicatorKey.currentState?.show();
+            },
+            icon: Icon(Icons.refresh),
+          ),
+          const SizedBox(height: 16),
+          Text('Artist', style: AppTextStyles.heading),
+          const SizedBox(height: 50),
 
           Expanded(child: content),
         ],
