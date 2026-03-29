@@ -1,7 +1,6 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
- 
+
 import '../../../model/artist/artist.dart';
 import '../../dtos/artist_dto.dart';
 import 'artist_repository.dart';
@@ -14,32 +13,38 @@ class ArtistRepositoryFirebase implements ArtistRepository {
 
   List<Artist>? _cachedArtistsData;
 
-
   @override
   Future<List<Artist>> fetchArtists({bool forceFetch = false}) async {
 
-    if(!forceFetch && _cachedArtistsData!= null){
+    if (!forceFetch && _cachedArtistsData != null) {
       return _cachedArtistsData!;
     }
 
     final http.Response response = await http.get(artistsUri);
 
-    if (response.statusCode == 200) {
-      // 1 - Send the retrieved list of songs
-      Map<String, dynamic> songJson = json.decode(response.body);
-
-      List<Artist> result = [];
-      for (final entry in songJson.entries) {
-        result.add(ArtistDto.fromJson(entry.key, entry.value));
-      }
-      _cachedArtistsData = result;
-      return result;
-    } else {
-      // 2- Throw expcetion if any issue
-      throw Exception('Failed to load posts');
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load artists');
     }
+
+    if (response.body == 'null') {
+      return [];
+    }
+
+    final Map<String, dynamic> data = json.decode(response.body);
+
+    final List<Artist> result = [];
+
+    for (final entry in data.entries) {
+      result.add(ArtistDto.fromJson(entry.key, entry.value));
+    }
+
+    _cachedArtistsData = result;
+
+    return result;
   }
 
   @override
-  Future<Artist?> fetchArtistById(String id) async {}
+  Future<Artist?> fetchArtistById(String id) async {
+
+  }
 }

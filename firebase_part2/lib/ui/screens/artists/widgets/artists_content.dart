@@ -1,3 +1,4 @@
+import 'package:firebase_part2/ui/screens/artists/artist_profile/artist_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
  
@@ -43,7 +44,10 @@ class ArtistsContent extends StatelessWidget {
           color: Colors.white,
           child: ListView.builder(
             itemCount: artists.length,
-            itemBuilder: (context, index) => ArtistTile(artist: artists[index]),
+            itemBuilder: (context, index) => ArtistTile(
+              artist: artists[index],
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=> ArtistProfileScreen(artist: artists[index]))),
+            ),
           ),
         );
         break;

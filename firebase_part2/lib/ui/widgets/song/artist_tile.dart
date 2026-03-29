@@ -5,10 +5,12 @@ class ArtistTile extends StatelessWidget {
   const ArtistTile({
     super.key,
     required this.artist,
+    required this.onTap
     
   });
 
   final Artist artist;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class ArtistTile extends StatelessWidget {
           leading: CircleAvatar(
             backgroundImage: NetworkImage(artist.imageUrl.toString()),
           ),
+          onTap: onTap,
         ),
       ),
     );

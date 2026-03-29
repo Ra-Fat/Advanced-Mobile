@@ -26,6 +26,7 @@
       "imageUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&q=80"
     }
   },
+
   "songs": {
     "song_1": {
       "title": "Time to Rise for Ronan",
@@ -75,6 +76,33 @@
       "artistId": "artist_5",
       "like": 70,
       "imageUrl": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=300&h=300&fit=crop&q=80"
+    }
+  },
+
+  "comments": {
+    "comment_1": {
+      "artistId": "artist_1",
+      "message": "This artist is amazing!",
+      "authorName": "John",
+      "createdAt": "2026-03-29T10:00:00.000Z"
+    },
+    "comment_2": {
+      "artistId": "artist_1",
+      "message": "Love this music 🔥",
+      "authorName": "Anna",
+      "createdAt": "2026-03-29T11:30:00.000Z"
+    },
+    "comment_3": {
+      "artistId": "artist_2",
+      "message": "So relaxing songs",
+      "authorName": "David",
+      "createdAt": "2026-03-28T09:00:00.000Z"
+    },
+    "comment_4": {
+      "artistId": "artist_3",
+      "message": "Best hip-hop artist!",
+      "authorName": "Chris",
+      "createdAt": "2026-03-27T14:20:00.000Z"
     }
   }
 }
